@@ -132,6 +132,7 @@ public class Chess {
 
 	public static void recordMove(String move)
 	{
+		if (File.createNewFile()
 		BufferedWriter writer = null;
 		try
 		{
