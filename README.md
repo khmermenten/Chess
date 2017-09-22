@@ -3,15 +3,26 @@ The game will create a history of your moves as you play the game, and can save 
 When you're done playing, you can look at the log and try to improve on your gameplay! Enjoy!
 
 How to Use Algebraic Notation
+
 8 |
+
 7 |
+
 6 |
+
 5 |
+
 4 |
+
 3 |
+
 2 |
-1 | _  _  _  _  _  _  _  _
-    a  b  c  d  e  f  g  h
+
+1 |
+
+    _    _    _    _    _    _    _    _
+    
+    a    b    c    d    e    f    g    h
 
 The chessboard looks like this when you play. To move your piece, you follow this format:
 [first letter of piece's name][desired destination coordinates]
@@ -23,6 +34,7 @@ An example of a valid move would be: Pa3, which moves white's leftmost pawn one 
 Special Commands
 - "0-0" for a king's side castle, "0-0-0" for a queen's side castle
 - If two pieces can move to the same square, you can use 
+
   [first letter of piece's name][piece's position][desired destination] 
   to disambiguate them
 - "save" to save the game and return to it later (only one game can be saved at a time)
