@@ -26,7 +26,9 @@ How to Use Algebraic Notation
 
 The chessboard has axes like this when you play. Each square is assigned a coordinate according to these axes.
 To move your piece, you follow this format:
+
 [first letter of piece's name][desired destination coordinates]
+
 When using this format, White's pieces are capitalized, while Black's are lowercased. 
 Coordinates should be written with the letter first.
 When moving the knight, use "N/n" to control it since King already has "K/k".
