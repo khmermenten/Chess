@@ -1,7 +1,28 @@
 Welcome to text based Chess! This is a two player only version of Chess in which you control your pieces using algebraic notation.
-Each square on the chess board is designated a set of coordinates. These coordinates are shown on the board.
-Control your pieces by first listing the piece you want to move, then the coordinate you want it to move to.
-The names of each piece are shown on the board. An example of a valid move would be: Pc6, which moves one of your pawns up one space.
-If two pieces can move to the same space, list the piece name, then its current coordinates, then the destination coordinates.
-The game will create a history of your moves as you play the game. When you're done playing, you can look at the log
-and try to improve on your gameplay! Enjoy!
+The game will create a history of your moves as you play the game, and can save and load your game. 
+When you're done playing, you can look at the log and try to improve on your gameplay! Enjoy!
+
+How to Use Algebraic Notation
+8 |
+7 |
+6 |
+5 |
+4 |
+3 |
+2 |
+1 | _  _  _  _  _  _  _  _
+    a  b  c  d  e  f  g  h
+
+The chessboard looks like this when you play. To move your piece, you follow this format:
+[first letter of piece's name][desired destination coordinates]
+When using this format, White's pieces are capitalized, while Black's are lowercased. 
+Coordinates should be written with the letter first.
+When moving the knight, use "N" to control it since King already has "K".
+An example of a valid move would be: Pa3, which moves white's leftmost pawn one square up.
+
+Special Commands
+- "0-0" for a king's side castle, "0-0-0" for a queen's side castle
+- If two pieces can move to the same square, you can use [first letter of piece's name][piece's position][desired destination] 
+  to disambiguate them
+- "save" to save the game and return to it later (only one game can be saved at a time)
+- "load" to load whatever game is currently saved
