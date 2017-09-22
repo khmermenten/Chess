@@ -20,9 +20,9 @@ How to Use Algebraic Notation
 
 1 |
 
-    _    _    _    _    _    _    _    _
+      _    _    _    _    _    _    _    _
     
-    a    b    c    d    e    f    g    h
+      a    b    c    d    e    f    g    h
 
 The chessboard looks kind of like this when you play. Each square is assigned a coordinate according to the axes shown.
 To move your piece, you follow this format:
