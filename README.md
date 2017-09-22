@@ -24,7 +24,8 @@ How to Use Algebraic Notation
     
     a    b    c    d    e    f    g    h
 
-The chessboard looks like this when you play. To move your piece, you follow this format:
+The chessboard looks kind of like this when you play. Each square is assigned a coordinate according to the axes shown.
+To move your piece, you follow this format:
 [first letter of piece's name][desired destination coordinates]
 When using this format, White's pieces are capitalized, while Black's are lowercased. 
 Coordinates should be written with the letter first.
