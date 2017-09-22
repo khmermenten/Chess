@@ -29,8 +29,8 @@ To move your piece, you follow this format:
 [first letter of piece's name][desired destination coordinates]
 When using this format, White's pieces are capitalized, while Black's are lowercased. 
 Coordinates should be written with the letter first.
-When moving the knight, use "N" to control it since King already has "K".
-An example of a valid move would be: Pa3, which moves white's leftmost pawn one square up.
+When moving the knight, use "N/n" to control it since King already has "K/k".
+An example of a valid move would be: Pa3, which moves White's leftmost pawn one square up.
 
 Special Commands
 - "0-0" for a king's side castle, "0-0-0" for a queen's side castle
