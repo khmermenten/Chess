@@ -22,7 +22,8 @@ An example of a valid move would be: Pa3, which moves white's leftmost pawn one 
 
 Special Commands
 - "0-0" for a king's side castle, "0-0-0" for a queen's side castle
-- If two pieces can move to the same square, you can use [first letter of piece's name][piece's position][desired destination] 
+- If two pieces can move to the same square, you can use 
+  [first letter of piece's name][piece's position][desired destination] 
   to disambiguate them
 - "save" to save the game and return to it later (only one game can be saved at a time)
 - "load" to load whatever game is currently saved
