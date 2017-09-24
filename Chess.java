@@ -1,59 +1,78 @@
 import java.util.*;
 import java.io.*;
-import java.nio.file.Files;
-public class Chess {
+public class Chess{
 	public static int [][] board;
 	public static ChessPiece[] playerOne;
 	public static ChessPiece[] playerTwo;
 	public static boolean whiteTurn;
+	public static int gameNumber;
 	public Chess()
 	{
 		playerOne = new ChessPiece[16];
 		playerTwo = new ChessPiece[16];
 		board = new int[8][8];
+		gameNumber = 1;
 	}
 
 	public static void initializePieces()
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 16; i++)
 		{
-			playerOne[i] = new ChessPiece("pawn", true, 60 + i);
-			playerTwo[i] = new ChessPiece("pawn", false, 10 + i);
+			playerOne[i] = new ChessPiece("rook", true, 666);
+			playerTwo[i] = new ChessPiece("rook", true, 666);
 		}
-		playerOne[8] = new ChessPiece("rook", true, 70);
-		playerOne[9] = new ChessPiece("rook", true, 77);
-		playerOne[10] = new ChessPiece("night", true, 71);
-		playerOne[11] = new ChessPiece("night", true, 76);
-		playerOne[12] = new ChessPiece("bishop", true, 72);
-		playerOne[13] = new ChessPiece("bishop", true, 75);
-		playerOne[14] = new ChessPiece("qrookbishop", true, 74);
-		playerOne[15] = new ChessPiece("king", true, 73);
-
-		playerTwo[8] = new ChessPiece("rook", false, 0);
-		playerTwo[9] = new ChessPiece("rook", false, 7);
-		playerTwo[10] = new ChessPiece("night", false, 1);
-		playerTwo[11] = new ChessPiece("night", false, 6);
-		playerTwo[12] = new ChessPiece("bishop", false, 2);
-		playerTwo[13] = new ChessPiece("bishop", false, 5);
-		playerTwo[14] = new ChessPiece("qrookbishop", false, 4);
-		playerTwo[15] = new ChessPiece("king", false, 3);
+		//		for (int i = 0; i < 8; i++)
+		//		{
+		//			playerOne[i] = new ChessPiece("pawn", true, 60 + i);
+		//			playerTwo[i] = new ChessPiece("pawn", false, 10 + i);
+		//		}
+		//		playerOne[8] = new ChessPiece("rook", true, 70);
+		//		playerOne[9] = new ChessPiece("rook", true, 77);
+		//		playerOne[10] = new ChessPiece("night", true, 71);
+		//		playerOne[11] = new ChessPiece("night", true, 76);
+		//		playerOne[12] = new ChessPiece("bishop", true, 72);
+		//		playerOne[13] = new ChessPiece("bishop", true, 75);
+		playerOne[14] = new ChessPiece("pawn", true, 43);
+		playerOne[11] = new ChessPiece("pawn", true, 61);
+		//		playerOne[15] = new ChessPiece("king", true, 73);
+		//
+		//		playerTwo[8] = new ChessPiece("rook", false, 0);
+		//		playerTwo[9] = new ChessPiece("rook", false, 7);
+		//		playerTwo[10] = new ChessPiece("night", false, 1);
+		//		playerTwo[11] = new ChessPiece("night", false, 6);
+		//		playerTwo[12] = new ChessPiece("bishop", false, 2);
+		//		playerTwo[13] = new ChessPiece("bishop", false, 5);
+		//		playerTwo[14] = new ChessPiece("qrookbishop", false, 4);
+		playerTwo[15] = new ChessPiece("pawn", false, 12);
+		playerTwo[12] = new ChessPiece("pawn", false, 42);
 	}
 
-	public static void initializeBoard()
+	public static void initializeBoard() throws IOException
 	{
-		for (ChessPiece piece: playerOne)
-			board[piece.position/10][piece.position%10] = piece.number();
-		for (ChessPiece piece: playerTwo)
-			board[piece.position/10][piece.position%10] = piece.number();
-		for (int i = 2; i < 6; i++)
+		//		for (ChessPiece piece: playerOne)
+		//			board[piece.position/10][piece.position%10] = piece.number();
+		//		for (ChessPiece piece: playerTwo)
+		//			board[piece.position/10][piece.position%10] = piece.number();
+		for (int i = 0; i < 8; i++)
 		{
 			for (int k = 0; k < 8; k++)
 				board[i][k] = 0;
 		}
+		board[6][1] = 1;
+		board[4][3] = 1;
+		board[1][2] = -1;
+		board[4][2] = -1;
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
+		gameNumber = 1;
+		File file = new File("chess" + gameNumber + ".txt");
+		while (!file.createNewFile())
+		{
+			gameNumber++;
+			file = new File("chess" + gameNumber + ".txt");
+		}
 		whiteTurn = true;
 		playerOne = new ChessPiece[16];
 		playerTwo = new ChessPiece[16];
@@ -63,87 +82,148 @@ public class Chess {
 		playGame();
 	}
 
-	public static void playGame()
+	public static void gameState()
 	{
-		String player = "white";
+		for (ChessPiece piece: playerOne)
+			System.out.println(piece.toString());
+		for (ChessPiece piece: playerTwo)
+			System.out.println(piece.toString());
+	}
+
+	public static void playGame() throws IOException
+	{
+		ArrayList<String> log = new ArrayList<String>();
+		String player = "";
 		Scanner keyIn = new Scanner(System.in);
 		String response = "";
-		while(gameIsNotOver(whiteTurn))
+		while(!staleMate())
 		{
-			printBoard();
-			System.out.println();
 			if (whiteTurn)
-				player = "white";
+				player = "White";
 			else
-				player = "black";
+				player = "Black";
 			if (check())
 			{
 				if (!checkMate())
 					System.out.println("Check!");
 				else
 				{
+					if (whiteTurn)
+						player = "Black";
+					else
+						player = "White";
 					System.out.println("Checkmate! " + player + " wins!");
 					break;
 				}
 			}
-			if (staleMate())
-			{
-				System.out.println("Stalemate!");
-				break;
-			}
+			printBoard();
 			System.out.println(player + "'s Turn! Make your move: ");
 			response = keyIn.nextLine();
-			while (invalidMove(response.toLowerCase()))
+			while (invalidMove(response) || response.equalsIgnoreCase("save") || response.equalsIgnoreCase("load"))
 			{
-				System.out.println("Invalid Move! Please make a valid move: ");
+				if (response.equalsIgnoreCase("load"))
+				{
+					load();
+					printBoard();
+					System.out.println("Game loaded! Make your move: ");
+				}
+				else if (response.equalsIgnoreCase("save"))
+				{
+					save();
+					System.out.println("Game saved! \nMake your move: ");
+				}
+				else 
+					System.out.println("Invalid Move! Please make a valid move: ");
 				response = keyIn.nextLine();
 			}
-			makeMove(response.toLowerCase());
-			recordMove(response);
+			makeMove(response);
+			log.add(response);
 			whiteTurn = !whiteTurn;
 		}
-		System.out.println("GG! Type \"log\" to see a log of your game! Otherwise, the program will end.");
+		printBoard();
+		if (staleMate())
+			System.out.println("Stalemate! " + player + " wins!");
+		System.out.println("GG! Type \"log\" to save a log of your game! Otherwise, the program will end.");
 		response = keyIn.nextLine();
 		if (response.equalsIgnoreCase("log"))
-			openFile();
+			record(log);
 		keyIn.close();
 	}
 
-	public static void openFile()
+	public static void save() throws IOException
 	{
-		System.out.print("\f");
-		try
+		File saveData = new File("Save.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(saveData));
+		writer.flush();
+		writer.write(gameNumber);
+		writer.newLine();
+		writer.write(whiteTurn + "");
+		writer.newLine();
+		for (int i = 0; i < 8; i ++)
 		{
-			BufferedReader reader = new BufferedReader(new FileReader("record"));
-			String line;
-			line = reader.readLine();
-			while (line != null)
+			for (int k = 0; k < 8; k++)
 			{
-				System.out.println(line);
-				line = reader.readLine();
+				writer.write(board[i][k] + "");
+				writer.newLine();
 			}
-			reader.close();
 		}
-		catch (Exception e)
+		for (ChessPiece piece: playerOne)
 		{
-			e.printStackTrace();
+			writer.write(piece.toString());
+			writer.newLine();
 		}
+		for (ChessPiece piece: playerTwo)
+		{
+			writer.write(piece.toString());
+			writer.newLine();
+		}
+		writer.close();
 	}
 
-	public static void recordMove(String move)
+	public static void load()
 	{
-		if (File.createNewFile()
-		BufferedWriter writer = null;
-		try
+		Scanner scan = new Scanner("Save.txt");
+		String line = scan.nextLine();
+		gameNumber = Integer.parseInt(line);
+		line = scan.nextLine();
+		whiteTurn = Boolean.parseBoolean(line);
+		line = scan.nextLine();
+		for (int i = 0; i < 8; i++)
 		{
-			File record = new File("record");
-			writer = new BufferedWriter(new FileWriter(record));
-			writer.write(move + "\n");
+			for (int k = 0; k < 8; k++)
+			{
+				board[i][k] = Integer.parseInt(line);
+				line = scan.nextLine();
+			}
 		}
-		catch (IOException e) 
+		for (ChessPiece piece: playerOne)
 		{
-			e.printStackTrace();
+			String[] temp = line.split(" ");
+			piece = new ChessPiece(temp[0], Boolean.parseBoolean(temp[1]), Integer.parseInt(temp[2]));
+			piece.moved = Boolean.parseBoolean(temp[3]);
+			line = scan.nextLine();
 		}
+		for (ChessPiece piece: playerTwo)
+		{
+			String[] temp = line.split(" ");
+			piece = new ChessPiece(temp[0], Boolean.parseBoolean(temp[1]), Integer.parseInt(temp[2]));
+			piece.moved = Boolean.parseBoolean(temp[3]);
+			line = scan.nextLine();
+		}
+		scan.close();
+	}
+
+	public static void record(ArrayList<String> log) throws IOException
+	{
+		File record = new File("chess" + gameNumber + ".txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(record));
+		for (String move: log)
+		{
+			System.out.println(move);
+			writer.write(move);
+			writer.newLine();
+		}
+		writer.close();
 	}
 	public static boolean clearPath (boolean kingSide)
 	{
@@ -158,45 +238,53 @@ public class Chess {
 		return board[0][4] == 0 && board[0][5] == 0 && board[0][6] == 0;
 	}
 
-	public static boolean invalidMove(String move)
+	public static Set<String> allPossibleMoves()
 	{
-		ArrayList<String> moves = new ArrayList<String>();
-		String build = "";
 		ChessPiece[] player = playerOne;
-		if (whiteTurn)
+		if (!whiteTurn)
 			player = playerTwo;
-		if	(move.equals("0-0"))
-			return clearPath(true) && !player[15].moved && !player[8].moved;
-		if (move.equals("0-0-0"))
-			return clearPath(false) && !player[15].moved && !player[9].moved;
+		Set<String> moves = new TreeSet<String>();
 		for (ChessPiece piece: player)
 		{
+			String build = "";
 			if (piece.position != 666)
 			{
 				int save = piece.position;
-				build = piece.pieceName.substring(0, 1);
-				if (whiteTurn)
-					build = build.toUpperCase();
 				for (int i: getPossibleMoves(piece))
 				{
+					System.out.println(piece.toString());
+					System.out.println(i);
+					build = piece.pieceName.substring(0, 1);
+					if (whiteTurn)
+						build = build.toUpperCase();
+					build += (char)(save%10 + 97);
+					build += 8 - save/10;
+					build += (char)(i%10 + 97);
+					build += 8 - i/10;
+					System.out.println(build);
 					piece.position = i;
 					if (!check())
-						moves.add(build + ((char)(i%10 + 97)) + (8 - (i/10)));
+					{
+						moves.add(build);
+						moves.add(build.charAt(0) + build.substring(3,  5));
+					}
 					piece.position = save;
 				}
 			}
 		}
-		return moves.contains(move);
+		return moves;
 	}
 
-	public static boolean gameIsNotOver(boolean whiteTurn)
+	public static boolean invalidMove(String move)
 	{
-		return !staleMate() && !checkMate();
-	}
-
-	public static boolean outOfBounds(int row, int col)
-	{
-		return row < 0 || row > 7 || col < 0 || col > 7;
+		ChessPiece[] player = playerOne;
+		if (!whiteTurn)
+			player = playerTwo;
+		if	(move.equalsIgnoreCase("0-0"))
+			return clearPath(false) && player[15].moved && player[8].moved;
+		if (move.equalsIgnoreCase("0-0-0"))
+			return clearPath(true) && player[15].moved && player[9].moved;
+		return !allPossibleMoves().contains(move);
 	}
 
 	public static Set<Integer> getPossibleMoves(ChessPiece piece)
@@ -204,65 +292,67 @@ public class Chess {
 		int row = piece.position/10;
 		int col = piece.position%10;
 		Set<Integer> moves = new TreeSet<Integer>();
+		Set<Integer> possibleMoves = new TreeSet<Integer>();
 		int team = 1;
-		if (piece.color)
+		if (!piece.color)
 			team = -1;
 		if (piece.pieceName.equals("pawn"))
 		{
-			if (piece.color)
+			ChessPiece [] player = playerOne;
+			if (whiteTurn)
+				player = playerTwo;
+			for (ChessPiece enemy: player)
 			{
-				moves.add(piece.position - 10);
-				if (!outOfBounds(row - 1, col - 1) && board[row - 1][col - 1] < 0)
-					moves.add(piece.position - 11);
-				if (!outOfBounds(row - 1, col + 1) && board[row - 1][col + 1] < 0)
-					moves.add(piece.position - 9);
-				if (!piece.moved)
-					moves.add(piece.position - 20);
+				if (enemy.pieceName.equals("pawn") && enemy.position == piece.position - 1 && enemy.enPassant)
+					possibleMoves.add(piece.position - (10 * team) - 1);
+				if (enemy.pieceName.equals("pawn") && enemy.position == piece.position + 1 && enemy.enPassant)
+					possibleMoves.add(piece.position - (10 * team) + 1);
 			}
-			else
-			{
-				moves.add(piece.position + 10);
-				if (!outOfBounds(row + 1, col - 1) && board[row + 1][col - 1] < 0)
-					moves.add(piece.position + 11);
-				if (!outOfBounds(row + 1, col + 1) && board[row + 1][col + 1] < 0)
-					moves.add(piece.position + 9);
-				if (!piece.moved)
-					moves.add(piece.position + 20);
-			}
+			moves.add(piece.position - (10 * team));
+			if (!outOfBounds(row - team, col - 1) && board[row - team][col - 1] * team < 0)
+				possibleMoves.add(piece.position - (10 * team) - 1);
+			if (!outOfBounds(row - team, col + 1) && board[row - team][col + 1] * team < 0)
+				possibleMoves.add(piece.position - (10 * team) + 1);
+			if (!piece.moved)
+				possibleMoves.add(piece.position - (20 * team));
 		}
 		if (piece.pieceName.contains("rook"))
 		{
-			for (int i = 0; i < 80; i+=10)
+			int i = col - 1;
+			//explore left
+			while (!(outOfBounds(row, i)) && board[row][i] * team <= 0)
 			{
-				if (!(outOfBounds(row + i, col)) && board[row + i][col] < team)
-				{
-					moves.add(piece.position + i);
-					if (board[row + i][col] != 0)
-					{
-						moves.clear();
-					}
-				}
-				if (!outOfBounds(row, col + (i/10)) && board[row][col + (i/10)] < team)
-				{
-					moves.add(piece.position + (i/10));
-					if (board[row][col + (i/10)] != 0)
-						break;
-				}
+				possibleMoves.add((row * 10) + i);
+				if (board[row][i] != 0) //enemy team
+					break;
+				i--;
 			}
-			for (int i = 0; i > 0; i-=10)
+			i = col + 1;
+			//explore right
+			while (!(outOfBounds(row, i)) && board[row][i] * team <= 0)
 			{
-				if (!(outOfBounds(row + i, col)) && board[row + i][col] < team)
-				{
-					moves.add(piece.position + i);
-					if (board[row + i][col] != 0)
-						break;
-				}
-				if (!outOfBounds(row, col + (i/10)) && board[row][col + (i/10)] < team)
-				{
-					moves.add(piece.position + (i/10));
-					if (board[row][col + (i/10)] != 0)
-						break;
-				}
+				possibleMoves.add((row * 10) + i);
+				if (board[row][i] != 0) //enemy team
+					break;
+				i++;
+			}
+			i = row - 1;
+			//explore up
+			while (!(outOfBounds(i, col)) && board[i][col] * team <= 0)
+			{
+				possibleMoves.add((i * 10) + col);
+				if (board[i][col] != 0) //enemy team
+					break;
+				i--;
+			}
+			i = row + 1;
+			//explore down
+			while (!(outOfBounds(i, col)) && board[i][col] * team <= 0)
+			{
+				possibleMoves.add((i * 10) + col);
+				if (board[i][col] != 0) //enemy team
+					break;
+				i++;
 			}
 		}
 		if (piece.pieceName.equals("night"))
@@ -278,12 +368,41 @@ public class Chess {
 		}
 		if (piece.pieceName.contains("bishop"))
 		{
-			for(int i = 0; i < 8; i++)
+			int i = piece.position - 11;
+			//explore top left
+			while (!(outOfBounds(i/10, i%10)) && board[i/10][i%10] * team <= 0)
 			{
-				moves.add(piece.position + 9);
-				moves.add(piece.position + 11);
-				moves.add(piece.position - 9);
-				moves.add(piece.position - 11);
+				possibleMoves.add(i);
+				if (board[i/10][i%10] != 0) //enemy team
+					break;
+				i -= 11;
+			}
+			//explore top right
+			i = piece.position - 9;
+			while (!(outOfBounds(i/10, i%10)) && board[i/10][i%10] * team <= 0)
+			{
+				possibleMoves.add(i);
+				if (board[i/10][i%10] != 0) //enemy team
+					break;
+				i -= 9;
+			}
+			//explore bottom left
+			i = piece.position + 9;
+			while (!(outOfBounds(i/10, i%10)) && board[i/10][i%10] * team <= 0)
+			{
+				possibleMoves.add(i);
+				if (board[i/10][i%10] != 0) //enemy team
+					break;
+				i += 9;
+			}
+			//explore bottom right
+			i = piece.position + 11;
+			while (!(outOfBounds(i/10, i%10)) && board[i/10][i%10] * team <= 0)
+			{
+				possibleMoves.add(i);
+				if (board[i/10][i%10] != 0) //enemy team
+					break;
+				i += 11;
 			}
 		}
 		if (piece.pieceName.equals("king"))
@@ -297,39 +416,41 @@ public class Chess {
 			moves.add(piece.position - 10);
 			moves.add(piece.position - 9);
 		}
-		Set<Integer> possibleMoves = new TreeSet<Integer>();
 		for (int i: moves)
 		{
-			ChessPiece[] player = playerOne;
-			piece.position = i;
-			if (!piece.color)
-				player = playerTwo;
-			if (!outOfBounds(i/10, i%10))
-			{
-				for (ChessPiece ally: player)
-				{
-					if (!(i == ally.position))
-						possibleMoves.add(i);
-				}
-			}
+			if (!outOfBounds(i/10, i%10) && board[i/10][i%10] * team <= 0)
+				possibleMoves.add(i);
 		}
 		return possibleMoves;
 	}
 
+	public static boolean outOfBounds(int row, int col)
+	{
+		return row < 0 || row > 7 || col < 0 || col > 7;
+	}
+
 	public static ChessPiece findPiece(String move)
 	{
-		ChessPiece [] pieces = playerOne;
+		ChessPiece [] player = playerOne;
 		if (!whiteTurn)
-			pieces = playerTwo;
-		for (ChessPiece piece: pieces)
+			player = playerTwo;
+		for (ChessPiece piece: player)
 		{
-			if (move.charAt(0) == piece.pieceName.charAt(0))
+			if (piece.pieceName.charAt(0) == move.toLowerCase().charAt(0))
 			{
 				if (move.length() == 3)
-					return piece;
-				String s = "" + (8 - Integer.parseInt(move.substring(2,3))) + (move.charAt(1) - 97);
-				if (Integer.parseInt(s) == piece.position)
-					return piece;
+				{
+					int i = 10 * (8 - Integer.parseInt("" + move.charAt(2)));
+					i +=((int)(move.charAt(1) - 97));
+					if (getPossibleMoves(piece).contains(i))
+						return piece;
+				}
+				else
+				{
+					String s = "" + (8 - Integer.parseInt(move.substring(2,3))) + (move.charAt(1) - 97);
+					if (move.length() == 5 && Integer.parseInt(s) == piece.position)
+						return piece;
+				}
 			}
 		}
 		System.out.println("Could not find piece!");
@@ -339,55 +460,54 @@ public class Chess {
 	public static void makeMove(String move)
 	{
 		if (move.equals("0-0"))
-				castle(true);
+			castle(true);
 		else if (move.equals("0-0-0"))
-				castle(false);
+			castle(false);
 		else
 		{
 			ChessPiece piece = findPiece(move);
 			board[piece.position/10][piece.position % 10] = 0;
 			int col = move.charAt(move.length() - 2) - 97;
 			int row = 8 - Integer.parseInt(move.substring(move.length()-1, move.length()));
-			board[row][col] = piece.number();
-			piece.position = (row * 10) + col;
-			piece.moved = true;
 			ChessPiece[] enemy = playerOne;
 			if (whiteTurn)
 				enemy = playerTwo;
 			for (ChessPiece capture: enemy)
 			{
-				if (piece.position == capture.position)
+				if ((piece.pieceName.equals("pawn")&& Math.abs(piece.position - capture.position) == 1 && capture.enPassant) ||
+					(piece.position == capture.position))
 				{
+					board[capture.position/10][capture.position%10] = 0;
 					capture.position = 666;
 					break;
 				}
 			}
-			if (piece.pieceName.equals("pawn") && piece.position/10 == 0)
-				piece.transform();
+			if (piece.pieceName.equals("pawn") && Math.abs(row - (piece.position/10)) == 2)
+				piece.enPassant = true;
+			else
+				piece.enPassant = false;
+			board[row][col] = piece.number();
+			piece.position = (row * 10) + col;
+			piece.moved = true;
+			if (piece.pieceName.equals("pawn"))
+			{
+				if (piece.color && piece.position/10 == 0)
+					piece.transform();
+				if (piece.color && piece.position/10 == 7)
+					piece.transform();
+			}
+
 		}
 	}
-
+	
 	public static boolean staleMate()
 	{
-		ChessPiece[] player = playerOne;
-		if (!whiteTurn)
-			player = playerTwo;
-		int save = player[15].position;
-		for (int i: getPossibleMoves(player[15]))
-		{
-			player[15].position = i;
-			if (!check())
-				return false;
-			player[15].position = save;
-		}
-		return !check();
+		return !check() && allPossibleMoves().isEmpty();
 	}
 
 	public static boolean checkMate()
 	{
-		if (whiteTurn)
-			return getPossibleMoves(playerOne[15]).isEmpty();
-		return getPossibleMoves(playerTwo[15]).isEmpty();
+		return allPossibleMoves().isEmpty();
 	}
 
 	public static boolean check()
@@ -413,6 +533,7 @@ public class Chess {
 
 	public static void printBoard()
 	{
+		System.out.flush();
 		boolean flip = false;
 		for (int i = 0; i < 8; i++)
 			System.out.print("   " + (char)(i + 97));
@@ -465,7 +586,7 @@ public class Chess {
 		}
 		for (int i = 0; i < 8; i++)
 			System.out.print("   " + (char)(i + 97));
-
+		System.out.println();
 	}
 
 	public static void castle(boolean shortSide)
@@ -484,17 +605,17 @@ public class Chess {
 		if (shortSide)
 		{
 			board[row][0] = 0;
-			board[row][2] = 6 * color; 
-			board[row][3] = 2 * color;
-			player[15].position = (row * 10)+ 2;
+			board[row][1] = 6 * color; 
+			board[row][2] = 2 * color;
+			player[15].position = (row * 10) + 2;
 			player[8].position = (row * 10) + 3;
 			player[8].moved = true;
 		}
 		else
 		{
 			board[row][7] = 0;
-			board[row][6] = 6 * color;
-			board[row][5] = 2 * color;
+			board[row][5] = 6 * color;
+			board[row][4] = 2 * color;
 			player[15].position = (row * 10) + 6;
 			player[9].position = (row * 10) + 5;
 			player[9].moved = true;
