@@ -4,6 +4,7 @@ public class ChessPiece {
 	public boolean color;
 	public int position;
 	public boolean moved;
+	public boolean enPassant;
 	
 	public ChessPiece(String pieceName, boolean color, int position)
 	{
@@ -11,6 +12,12 @@ public class ChessPiece {
 		this.color = color;
 		this.position = position;
 		moved = false;
+		enPassant = false;
+	}
+	
+	public String toString()
+	{
+		return pieceName + " " + color + " " + position + " " + moved;
 	}
 	
 	public int number()
@@ -24,12 +31,12 @@ public class ChessPiece {
 			num = 3;
 		if (pieceName.equals("bishop"))
 			num = 4;
-		if (pieceName.equals("queen"))
+		if (pieceName.equals("qrookbishop"))
 			num = 5;
 		if (pieceName.equals("king"))
 			num = 6;
 		if (!color)
-			num = num*-1;
+			num = num * -1;
 		return num;
 	}
 
@@ -42,7 +49,7 @@ public class ChessPiece {
 		while (pieceName.equals("dog"))
 		{
 			if (name.equals("queen"))
-				pieceName = "queen";
+				pieceName = "qrookbishop";
 			if (name.equals("castle") || name.equals("rook"))
 				pieceName = "rook";
 			if (name.equals("horse") || name.equals("knight"))
