@@ -16,52 +16,36 @@ public class Chess{
 
 	public static void initializePieces()
 	{
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < 8; i++)
 		{
-			playerOne[i] = new ChessPiece("rook", true, 666);
-			playerTwo[i] = new ChessPiece("rook", true, 666);
+			playerOne[i] = new ChessPiece("pawn", true, 60 + i);
+			playerTwo[i] = new ChessPiece("pawn", false, 10 + i);
 		}
-		//		for (int i = 0; i < 8; i++)
-		//		{
-		//			playerOne[i] = new ChessPiece("pawn", true, 60 + i);
-		//			playerTwo[i] = new ChessPiece("pawn", false, 10 + i);
-		//		}
-		//		playerOne[8] = new ChessPiece("rook", true, 70);
-		//		playerOne[9] = new ChessPiece("rook", true, 77);
-		//		playerOne[10] = new ChessPiece("night", true, 71);
-		//		playerOne[11] = new ChessPiece("night", true, 76);
-		//		playerOne[12] = new ChessPiece("bishop", true, 72);
-		//		playerOne[13] = new ChessPiece("bishop", true, 75);
-		playerOne[14] = new ChessPiece("pawn", true, 43);
-		playerOne[11] = new ChessPiece("pawn", true, 61);
-		//		playerOne[15] = new ChessPiece("king", true, 73);
-		//
-		//		playerTwo[8] = new ChessPiece("rook", false, 0);
-		//		playerTwo[9] = new ChessPiece("rook", false, 7);
-		//		playerTwo[10] = new ChessPiece("night", false, 1);
-		//		playerTwo[11] = new ChessPiece("night", false, 6);
-		//		playerTwo[12] = new ChessPiece("bishop", false, 2);
-		//		playerTwo[13] = new ChessPiece("bishop", false, 5);
-		//		playerTwo[14] = new ChessPiece("qrookbishop", false, 4);
-		playerTwo[15] = new ChessPiece("pawn", false, 12);
-		playerTwo[12] = new ChessPiece("pawn", false, 42);
+		playerOne[8] = new ChessPiece("rook", true, 70);
+		playerOne[9] = new ChessPiece("rook", true, 77);
+		playerOne[10] = new ChessPiece("night", true, 71);
+		playerOne[11] = new ChessPiece("night", true, 76);
+		playerOne[12] = new ChessPiece("bishop", true, 72);
+		playerOne[13] = new ChessPiece("bishop", true, 75);
+		playerOne[14] = new ChessPiece("qrookbishop", true, 74);
+		playerOne[15] = new ChessPiece("king", true, 73);
+
+		playerTwo[8] = new ChessPiece("rook", false, 0);
+		playerTwo[9] = new ChessPiece("rook", false, 7);
+		playerTwo[10] = new ChessPiece("night", false, 1);
+		playerTwo[11] = new ChessPiece("night", false, 6);
+		playerTwo[12] = new ChessPiece("bishop", false, 2);
+		playerTwo[13] = new ChessPiece("bishop", false, 5);
+		playerTwo[14] = new ChessPiece("qrookbishop", false, 4);
+		playerTwo[15] = new ChessPiece("king", false, 3);
 	}
 
 	public static void initializeBoard() throws IOException
 	{
-		//		for (ChessPiece piece: playerOne)
-		//			board[piece.position/10][piece.position%10] = piece.number();
-		//		for (ChessPiece piece: playerTwo)
-		//			board[piece.position/10][piece.position%10] = piece.number();
-		for (int i = 0; i < 8; i++)
-		{
-			for (int k = 0; k < 8; k++)
-				board[i][k] = 0;
-		}
-		board[6][1] = 1;
-		board[4][3] = 1;
-		board[1][2] = -1;
-		board[4][2] = -1;
+		for (ChessPiece piece: playerOne)
+			board[piece.position/10][piece.position%10] = piece.number();
+		for (ChessPiece piece: playerTwo)
+			board[piece.position/10][piece.position%10] = piece.number();
 	}
 
 	public static void main(String[] args) throws IOException
@@ -252,8 +236,6 @@ public class Chess{
 				int save = piece.position;
 				for (int i: getPossibleMoves(piece))
 				{
-					System.out.println(piece.toString());
-					System.out.println(i);
 					build = piece.pieceName.substring(0, 1);
 					if (whiteTurn)
 						build = build.toUpperCase();
@@ -261,7 +243,6 @@ public class Chess{
 					build += 8 - save/10;
 					build += (char)(i%10 + 97);
 					build += 8 - i/10;
-					System.out.println(build);
 					piece.position = i;
 					if (!check())
 					{
@@ -475,7 +456,7 @@ public class Chess{
 			for (ChessPiece capture: enemy)
 			{
 				if ((piece.pieceName.equals("pawn")&& Math.abs(piece.position - capture.position) == 1 && capture.enPassant) ||
-					(piece.position == capture.position))
+						(piece.position == capture.position))
 				{
 					board[capture.position/10][capture.position%10] = 0;
 					capture.position = 666;
@@ -499,7 +480,7 @@ public class Chess{
 
 		}
 	}
-	
+
 	public static boolean staleMate()
 	{
 		return !check() && allPossibleMoves().isEmpty();
