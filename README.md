@@ -4,15 +4,16 @@ When you're done playing, you can look at the log and try to improve on your gam
 
 How to Use Algebraic Notation
 
-1| | | | | | |
-2| | | | | | |
-3| | | | | | |
-4| | | | | | |
-5| | | | | | |
-6| | | | | | |
-7| | | | | | |
-8| | | | | | |
- | a|b |c |d |e |f |g|h
+|1| | | | | | | | |
+|-|-|-|-|-|-|-|-|-|
+|2| | | | | | | | |
+|3| | | | | | | | |
+|4| | | | | | | | |
+|5| | | | | | | | |
+|6| | | | | | | | |
+|7| | | | | | | | |
+|8| | | | | | | | |
+| |a|b|c|d|e|f|g|h|
 
 The chessboard has axes like this when you play. Each square is assigned a coordinate according to these axes.
 To move your piece, you follow this format:
